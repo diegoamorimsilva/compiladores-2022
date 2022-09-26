@@ -50,7 +50,7 @@ extern int yydebug;
   enum yytokentype
   {
     TOK_PRINT = 258,
-    TOK_INDENT = 259,
+    TOK_IDENT = 259,
     TOK_INTEGER = 260,
     TOK_FLOAT = 261,
     TOK_LITERAL = 262
@@ -59,7 +59,16 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 13 "calc.y"
+
+	struct noh *no;
+
+#line 69 "calc.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

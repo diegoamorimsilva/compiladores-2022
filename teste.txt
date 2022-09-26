@@ -1,6 +1,5 @@
 A = 10
-B = 20.7
+B = 20.7^A
 C = (A+B)/B*C
 D = A + B
-E = A / B
 print C

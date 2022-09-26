@@ -12,18 +12,19 @@ L	[a-zA-Z_]
 %% 
 
 [ \t\r\n]			{}
-"print"				{ return TOK_PRINT;  }
-"="					{ return '='; }
+"print"				{ return TOK_PRINT; }
+"="					{ return '=';  }
 "*"					{ return '*'; }
 "/"					{ return '/'; }
 "+"					{ return '+'; }
 "-"					{ return '-'; }
 "("					{ return '('; }
 ")"					{ return ')'; }
+"^"					{ return '^'; }
 
-{D}+				        { return TOK_INTEGER; }
-{D}+\.{D}+			        { return TOK_FLOAT;   }
-{L}({L}|{D})*		                { return TOK_LITERAL;}
+{D}+				{ return TOK_INTEGER; }
+{D}+\.{D}+			{ return TOK_FLOAT; }
+{L}({L}|{D})*		{ return TOK_IDENT; }
  /* [a-zA-Z_][a-zA-Z0-9_]* {} */
 
 
