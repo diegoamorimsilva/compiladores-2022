@@ -22,9 +22,9 @@ L	[a-zA-Z_]
 ")"					{ return ')'; }
 "^"					{ return '^'; }
 
-{D}+				{ return TOK_INTEGER; }
-{D}+\.{D}+			{ return TOK_FLOAT; }
-{L}({L}|{D})*		{ return TOK_IDENT; }
+{D}+				{ yylval.args.intv = atoi(yytext); return TOK_INTEGER; }
+{D}+\.{D}+			{ yylval.args.dblv = atof(yytext); return TOK_FLOAT; }
+{L}({L}|{D})*		{ yylval.args.ident = strndup(yyleng); return TOK_IDENT; }
  /* [a-zA-Z_][a-zA-Z0-9_]* {} */
 
 

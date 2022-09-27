@@ -15,6 +15,12 @@ static const char *noh_type_names[] = {
 	"DIVIDE", "PRINT", "POW", "PAREN", "STMT", 
 	"INTEGER", "FLOAT", "IDENT", "GENERIC"};
 
+struct {
+	double dblv;
+	int intv;
+	char *ident;
+} token_args;
+
 struct noh {
 	int id;
 	enum noh_type type;

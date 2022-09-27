@@ -12,12 +12,13 @@ extern int yylineno;
 
 %union {
 	struct noh *no;
+	token_args args;
 }
 
 %define parse.error verbose
 
-%token TOK_PRINT TOK_IDENT
-%token TOK_INTEGER TOK_FLOAT
+%token TOK_PRINT 
+%token <args> TOK_IDENT TOK_INTEGER TOK_FLOAT
 %token TOK_LITERAL
 
 %type <no> program stmts stmt atribuicao aritmetica
