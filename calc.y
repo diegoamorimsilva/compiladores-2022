@@ -121,11 +121,11 @@ factor : '(' aritmetica ')' {
 	     }
 	   | TOK_INTEGER {
 	   		$$ = create_noh(INTEGER, 0);
-			$$->value = 0;
+			$$->intv = 0;
 	   	 }
 	   | TOK_FLOAT {
 	   		$$ = create_noh(FLOAT, 0);
-			$$->value = 0;
+			$$->dblv = 0;
 	   	 }
 	   ;
 

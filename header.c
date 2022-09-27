@@ -23,8 +23,29 @@ void print(noh *root){
 	fclose(f);
 }
 
+const char *get_label(noh *no) {
+	static char aux[100];
+
+	switch (no->type) {
+	
+	case INTERGER:
+	sprintf(aux, "%d", no->intv);
+	return aux;
+
+	case FLOAT:
+	sprintf(aux, "%f", no->dblv);
+	return aux;
+
+	case: INDENT:
+	return no->name;
+	
+	default:
+	return noh_type_names[no->type];
+	}
+}
+
 void print_rec(FILE *f, noh *root){
-	fprintf(f, "N%d;\n", root->id);
+	fprintf(f, "N%d[label=\"%s\";\n", root->id, get_label(root));
 	for(int i = 0; i < root->childcount; i++){
 	print_rec(f, root->children[i]);
 	fprintf(f, "N%d -- N%d;\n",

@@ -10,12 +10,17 @@ enum noh_type {PROGRAM,
 	PAREN, STMT, INTEGER, FLOAT,
 	IDENT, GENERIC};
 
+static const char *noh_type_names[] = {
+	"PROGRAM", "ASSIGN", "+", "-", "print", "POW", "PAREN", "STMT", 
+	"INTEGER", "FLOAT", "IDENT", "GENERIC"};
+
 struct noh {
 	int id;
 	enum noh_type type;
 	int childcount;
 
-	double value;
+	double dblv;
+	int intv;
 	char *name;
 
 	struct noh *children[1];
