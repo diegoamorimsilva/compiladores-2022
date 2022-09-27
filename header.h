@@ -11,7 +11,8 @@ enum noh_type {PROGRAM,
 	IDENT, GENERIC};
 
 static const char *noh_type_names[] = {
-	"PROGRAM", "ASSIGN", "+", "-", "print", "POW", "PAREN", "STMT", 
+	"PROGRAM", "ASSIGN", "SUM", "MINUS", "MULTI",
+	"DIVIDE", "PRINT", "POW", "PAREN", "STMT", 
 	"INTEGER", "FLOAT", "IDENT", "GENERIC"};
 
 struct noh {

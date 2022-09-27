@@ -1483,7 +1483,7 @@ yyreduce:
 #line 122 "calc.y"
                          {
 	   		(yyval.no) = create_noh(INTEGER, 0);
-			(yyval.no)->value = 0;
+			(yyval.no)->intv = 0;
 	   	 }
 #line 1489 "calc.tab.c"
     break;
@@ -1492,7 +1492,7 @@ yyreduce:
 #line 126 "calc.y"
                        {
 	   		(yyval.no) = create_noh(FLOAT, 0);
-			(yyval.no)->value = 0;
+			(yyval.no)->dblv = 0;
 	   	 }
 #line 1498 "calc.tab.c"
     break;

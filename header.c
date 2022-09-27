@@ -28,7 +28,7 @@ const char *get_label(noh *no) {
 
 	switch (no->type) {
 	
-	case INTERGER:
+	case INTEGER:
 	sprintf(aux, "%d", no->intv);
 	return aux;
 
@@ -36,7 +36,7 @@ const char *get_label(noh *no) {
 	sprintf(aux, "%f", no->dblv);
 	return aux;
 
-	case: INDENT:
+	case IDENT:
 	return no->name;
 	
 	default:
@@ -45,7 +45,7 @@ const char *get_label(noh *no) {
 }
 
 void print_rec(FILE *f, noh *root){
-	fprintf(f, "N%d[label=\"%s\";\n", root->id, get_label(root));
+	fprintf(f, "N%d[label=\"%s\"];\n", root->id, get_label(root));
 	for(int i = 0; i < root->childcount; i++){
 	print_rec(f, root->children[i]);
 	fprintf(f, "N%d -- N%d;\n",
