@@ -1,141 +1,150 @@
 %{
 #include <stdio.h>
 
-#include "header.h"
+#include  "header.h"
 
 int yyerror(const char *s);
 int yylex (void);
 
-//#define YYERROR_VERBOSE 1
 extern int yylineno;
 %}
 
 %union {
-	struct noh *no;
-	token_args args;
+    token_args args;
+	struct node *n;
 }
 
 %define parse.error verbose
 
-%token TOK_PRINT 
+%token TOK_PRINT
 %token <args> TOK_IDENT TOK_INTEGER TOK_FLOAT
-%token TOK_LITERAL
+/* %token TOK_LITERAL */
 
-%type <no> program stmts stmt atribuicao aritmetica
-%type <no> term term2 factor
+%type <n> program stmts stmt atribuicao aritmetica term exp factor
 
 %start program
-
 %%
 
-program : stmts {
-			  noh *program = create_noh(PROGRAM, 1);
-			  program->children[0] = $1;
-			  print(program);
+program:
+    stmts {
+        node *prog = create_node(PROGRAM, 1);
+        prog->children[0] = $1;
 
-			  // chamada da arvore abstrata
-			  // chamada da verificao semântica
-			  // chamada da geração de código
-		  }
-        ;
+        print(prog);
+        // chamada da arvore abstrata
+        // chamada da verificação semantica
+        // chamada da geração de codigo
 
-stmts : stmt stmts {
-	  		$$ = create_noh(STMT, 2);
-			$$->children[0] = $1;
-			$$->children[1] = $2;
-		}
-      | stmt {
-	  		$$ = create_noh(STMT, 1);
-			$$->children[0] = $1;
-		}
-	  ;
+    }
+    ;
 
-stmt : atribuicao {
-	  		$$ = create_noh(GENERIC, 1);
-			$$->children[0] = $1;
-	   }
-     | TOK_PRINT aritmetica {
-	  		$$ = create_noh(PRINT, 1);
-			$$->children[0] = $2;
-	   }
-     ;
+stmts:
+    stmt stmts {
+        $$ = create_node(STMT, 2);
+        $$->children[0] = $1;
+        $$->children[1] = $2;
+    }
+    | stmt {
+        $$ = create_node(STMT, 1);
+        $$->children[0] = $1;
+    }
+    ;
 
-atribuicao : TOK_IDENT '=' aritmetica {
-	  			$$ = create_noh(ASSIGN, 2);
-				noh *aux = create_noh(IDENT, 0);
-				aux->name = NULL;
-				$$->children[0] = aux;
-				$$->children[1] = $3;   
-	   		 }
-           ;
+stmt:
+    atribuicao {
+        $$ = create_node(GENERIC, 1);
+        $$->children[0] = $1;
+    }
+    |TOK_PRINT aritmetica {
+        $$ = create_node(PRINT, 1);
+        $$->children[0] = $2;
+    }
+    ;
 
-aritmetica : aritmetica '+' term {
-	  			$$ = create_noh(SUM, 2);
-				$$->children[0] = $1;
-				$$->children[1] = $3;	   
-	   		 }
-		   | aritmetica '-' term {
-	  			$$ = create_noh(MINUS, 2);
-				$$->children[0] = $1;
-				$$->children[1] = $3;	   
-	   		 }
-           | term {
-	  			$$ = create_noh(GENERIC, 1);
-				$$->children[0] = $1;
-	   		 }
-		   ;
+atribuicao:
+    TOK_IDENT '=' aritmetica {
+        $$ = create_node(ASSIGN, 2);
+        node *aux = create_node(IDENT, 0);
+        aux->name = $1.ident;
+        $$->children[0] = aux;
+        $$->children[1] = $3;
+    }
+    ;
 
-term : term '*' term2 {
-	  		$$ = create_noh(MULTI, 2);
-			$$->children[0] = $1;
-			$$->children[1] = $3;	   
-	   }
-     | term '/' term2 {
-	  		$$ = create_noh(DIVIDE, 2);
-			$$->children[0] = $1;
-			$$->children[1] = $3;	   
-	   }
-     | term2 {
-	  		$$ = create_noh(GENERIC, 1);
-			$$->children[0] = $1;
-	   }
-	 ;
+aritmetica:
+    aritmetica '+' term {
+        $$ = create_node(SUM, 2);
+        $$->children[0] = $1;
+        $$->children[1] = $3;
+    }
+    | aritmetica '-' term {
+        $$ = create_node(MINUS, 2);
+        $$->children[0] = $1;
+        $$->children[1] = $3;
+    }
+    | term {
+        $$ = create_node(GENERIC, 1);
+        $$->children[0] = $1;
+    }
+    ;
 
-term2 : term2 '^' factor {
-	  		$$ = create_noh(POW, 2);
-			$$->children[0] = $1;
-			$$->children[1] = $3;
-		}
-      | factor {
-	  		$$ = create_noh(GENERIC, 1);
-			$$->children[0] = $1;
-	  	}
-	  ;
+term:
+    term '*' exp {
+        $$ = create_node(MULTI, 2);
+        $$->children[0] = $1;
+        $$->children[1] = $3;
+    }
+    | term '/' exp {
+        $$ = create_node(DIVIDE, 2);
+        $$->children[0] = $1;
+        $$->children[1] = $3;
+    }
+    | term '%' exp {
+        $$ = create_node(MODULO, 2);
+        $$->children[0] = $1;
+        $$->children[1] = $3;
+    }
+    | exp {
+        $$ = create_node(GENERIC, 1);
+        $$->children[0] = $1;
+    }
+    ;
 
-factor : '(' aritmetica ')' {
-			$$ = create_noh(PAREN, 1);
-			$$->children[0] = $2;
-		 }
-       | TOK_IDENT {
-	   		$$ = create_noh(IDENT, 0);
-			$$->name = NULL;
-	     }
-	   | TOK_INTEGER {
-	   		$$ = create_noh(INTEGER, 0);
-			$$->intv = 0;
-	   	 }
-	   | TOK_FLOAT {
-	   		$$ = create_noh(FLOAT, 0);
-			$$->dblv = 0;
-	   	 }
-	   ;
+exp:
+    exp '^' factor {
+        $$ = create_node(POW, 2);
+        $$->children[0] = $1;
+        $$->children[1] = $3;
+    }
+    | factor {
+        $$ = create_node(GENERIC , 1);
+        $$->children[0] = $1;
+    }
+    ;
+
+factor:
+    '(' aritmetica ')' {
+        $$ = create_node(PAREN, 1);
+        $$->children[0] = $2;
+    }
+    | TOK_IDENT {
+        $$ = create_node(IDENT, 0);
+        $$->name = $1.ident;
+    }
+    | TOK_INTEGER {
+        $$ = create_node(INTEGER, 0);
+        $$->intv = $1.intv;
+    }
+    | TOK_FLOAT {
+        $$ = create_node(FLOAT, 0);
+        $$->dblv = $1.dblv;
+    }
+    ;
 
 
 %%
 
 int yyerror(const char *s) {
-printf("Erro na linha %d: %s\n", yylineno, s);
-	return 1;
+    printf("Parser erro na linha %d: %s\n", yylineno, s);
+    return 1;
 }
-
-
