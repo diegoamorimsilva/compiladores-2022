@@ -45,8 +45,9 @@ stmts:
         $$->children[1] = $2;
     }
     | stmt {
-        $$ = create_node(STMT, 1);
-        $$->children[0] = $1;
+    	$$ = $1;
+        //$$ = create_node(STMT, 1);
+        //$$->children[0] = $1;
     }
     ;
 
@@ -83,8 +84,9 @@ aritmetica:
         $$->children[1] = $3;
     }
     | term {
-        $$ = create_node(GENERIC, 1);
-        $$->children[0] = $1;
+    	$$ = $1;
+        // $$ = create_node(GENERIC, 1);
+        //$$->children[0] = $1;
     }
     ;
 
@@ -105,8 +107,9 @@ term:
         $$->children[1] = $3;
     }
     | exp {
-        $$ = create_node(GENERIC, 1);
-        $$->children[0] = $1;
+    	$$ = $1;
+        // $$ = create_node(GENERIC, 1);
+        //$$->children[0] = $1;
     }
     ;
 
@@ -117,15 +120,17 @@ exp:
         $$->children[1] = $3;
     }
     | factor {
-        $$ = create_node(GENERIC , 1);
-        $$->children[0] = $1;
+    	$$ = $1;
+        // $$ = create_node(GENERIC , 1);
+        // $$->children[0] = $1;
     }
     ;
 
 factor:
     '(' aritmetica ')' {
-        $$ = create_node(PAREN, 1);
-        $$->children[0] = $2;
+    	$$ = $2;
+        //$$ = create_node(PAREN, 1);
+        //$$->children[0] = $2;
     }
     | TOK_IDENT {
         $$ = create_node(IDENT, 0);

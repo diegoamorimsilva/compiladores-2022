@@ -8,21 +8,21 @@ enum node_type {
     MINUS,
     MULTI,
     DIVIDE,
+    MODULO,
     PRINT,
     POW,
-    FLOAT,
-    INTEGER,
     PAREN,
-    GENERIC,
-    MODULO,
     STMT,
-    IDENT
+    INTEGER,
+    FLOAT,
+    IDENT,
+    GENERIC
 };
 
 static const char * node_type_name[] = {
     "program", "=", "+", "-", "*",
-    "/", "print", "^", "()", "stmt",
-    "int", "float", "ident", "generic"
+    "/", "%", "print", "^","()",
+    "stmt", "int", "float","ident", "generic"
 };
 
 typedef struct {

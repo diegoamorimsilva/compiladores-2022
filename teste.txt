@@ -3,4 +3,5 @@ B = 20.7
 C = (A+B) / B*C
 D = A + B
 F = B - A
+E = A * C
 print C
