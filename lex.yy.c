@@ -381,8 +381,8 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[27] =
     {   0,
-        0,    0,   16,   14,    1,    1,    8,    9,    4,    6,
-        7,    5,   11,    3,   13,   10,   13,    0,   11,   13,
+        0,    0,   16,   14,    1,    1,    9,   10,    5,    7,
+        8,    6,   11,    3,   13,    4,   13,    0,   11,   13,
        13,   12,   13,   13,    2,    0
     } ;
 
@@ -480,9 +480,10 @@ char *yytext;
 #line 1 "calc.l"
 #line 3 "calc.l"
 	#include <stdio.h>
+	#include "header.h"
 	#include "calc.tab.h"
-#line 485 "lex.yy.c"
 #line 486 "lex.yy.c"
+#line 487 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -699,10 +700,10 @@ YY_DECL
 		}
 
 	{
-#line 12 "calc.l"
+#line 13 "calc.l"
 
 
-#line 706 "lex.yy.c"
+#line 707 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -772,82 +773,82 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 14 "calc.l"
+#line 15 "calc.l"
 {}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 15 "calc.l"
+#line 16 "calc.l"
 { return TOK_PRINT; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 16 "calc.l"
-{ return '=';  }
+#line 17 "calc.l"
+{ return '='; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 17 "calc.l"
-{ return '*'; }
+#line 18 "calc.l"
+{ return '^'; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 18 "calc.l"
-{ return '/'; }
+#line 19 "calc.l"
+{ return '*'; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 19 "calc.l"
-{ return '+'; }
+#line 20 "calc.l"
+{ return '/'; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 20 "calc.l"
-{ return '-'; }
+#line 21 "calc.l"
+{ return '+'; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 21 "calc.l"
-{ return '('; }
+#line 22 "calc.l"
+{ return '-'; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 22 "calc.l"
-{ return ')'; }
+#line 23 "calc.l"
+{ return '('; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 23 "calc.l"
-{ return '^'; }
+#line 24 "calc.l"
+{ return ')'; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 25 "calc.l"
-{ return TOK_INTEGER; }
+#line 27 "calc.l"
+{ yylval.args.intv = atoi(yytext); return TOK_INTEGER; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 26 "calc.l"
-{ return TOK_FLOAT; }
+#line 28 "calc.l"
+{ yylval.args.dblv = atof(yytext); return TOK_FLOAT; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 27 "calc.l"
-{ return TOK_IDENT; }
+#line 29 "calc.l"
+{ yylval.args.ident = strndup(yytext, yyleng); return TOK_IDENT; }
 	YY_BREAK
 /* [a-zA-Z_][a-zA-Z0-9_]* {} */
 /* comentário */
 case 14:
 YY_RULE_SETUP
-#line 32 "calc.l"
+#line 34 "calc.l"
 { printf("Invalid caracter: %c.\n", yytext[0]); }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 34 "calc.l"
+#line 36 "calc.l"
 ECHO;
 	YY_BREAK
-#line 851 "lex.yy.c"
+#line 852 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1864,7 +1865,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 34 "calc.l"
+#line 36 "calc.l"
 
 
 int yywrap() {
@@ -1872,17 +1873,21 @@ int yywrap() {
 }
 
 int main(int argc, char *argv[]) {
-	
-	if (argc <= 1) {
+
+	if (argc != 2) {
 		printf("%s [file]\n", argv[0]);
 		return 1;
 	}
 
 	FILE *f = fopen(argv[1], "r");
+
+	if(!f) {
+		printf("Can\'t open the file %s\n", argv[1]);
+	}
+
 	yyin = f;
 	yyparse();
 	fclose(f);
 	return 0;
 }
-
 

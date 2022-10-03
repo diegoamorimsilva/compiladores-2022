@@ -1,54 +1,57 @@
-// header.c
 #include <stdlib.h>
+
 #include "header.h"
 
-noh *create_noh(enum noh_type nt, int children) {
-	static int IDCOUNT = 0;
-	noh *newn = (noh*)calloc(1,
-		sizeof(noh)+
-		sizeof(noh*)*(children-1));
-	newn->type = nt;
-	newn->childcount = children;
-	newn->id = IDCOUNT++;
-	return newn;
+node *create_node(enum node_type nt, int children) {
+    static int IDCOUNT = 0;
+
+    node *new_node = (node*) calloc(1, sizeof(node) + sizeof(node*) * (children - 1));
+    new_node->type = nt;
+    new_node->childcount = children;
+    new_node->id = IDCOUNT++;
+
+    return new_node;
 }
 
-void print(noh *root){
-	FILE *f = fopen("output.dot", "w");
-	
-	fprintf(f, "graph G {\n");
-	print_rec(f, root);
-	fprintf(f,"}\n");
-	
-	fclose(f);
+
+const char * get_label(node *n) {
+    static char aux[100];
+    switch (n->type) {
+        case INTEGER:
+            sprintf(aux, "%d", n->intv);
+            return aux;
+        case FLOAT:
+            sprintf(aux, "%f", n->dblv);
+            return aux;
+        case IDENT:
+            return n->name;
+        default:
+            return node_type_name[n->type];
+    }
 }
 
-const char *get_label(noh *no) {
-	static char aux[100];
 
-	switch (no->type) {
-	
-	case INTEGER:
-	sprintf(aux, "%d", no->intv);
-	return aux;
+void print_rec(FILE *f, node *root) {
+    fprintf(f, "    N%d[label=\"%s\"];\n", root->id, get_label(root));
 
-	case FLOAT:
-	sprintf(aux, "%f", no->dblv);
-	return aux;
-
-	case IDENT:
-	return no->name;
-	
-	default:
-	return noh_type_names[no->type];
-	}
+    for (int i = 0; i < root->childcount; i++) {
+        print_rec(f, root->children[i]);
+        fprintf(f, "    N%d -- N%d;\n", root->id, root->children[i]->id);
+    }
 }
 
-void print_rec(FILE *f, noh *root){
-	fprintf(f, "N%d[label=\"%s\"];\n", root->id, get_label(root));
-	for(int i = 0; i < root->childcount; i++){
-	print_rec(f, root->children[i]);
-	fprintf(f, "N%d -- N%d;\n",
-	root->id, root->children[i]->id);
-	}
+
+void print(node *root) {
+    FILE *f = fopen("output.dot", "w");
+
+    if (f == NULL) {
+        fprintf(stderr, "Error: Unable to open file\n");
+        return;
+    }
+
+    fprintf(f, "graph G {\n");
+    print_rec(f, root);
+    fprintf(f, "}");
+
+    fclose(f);
 }

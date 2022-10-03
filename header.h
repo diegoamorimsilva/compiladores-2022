@@ -1,41 +1,52 @@
-
 #pragma once
 #include <stdio.h>
 
-// header.h
+enum node_type {
+    PROGRAM,
+    ASSIGN,
+    SUM,
+    MINUS,
+    MULTI,
+    DIVIDE,
+    PRINT,
+    POW,
+    FLOAT,
+    INTEGER,
+    PAREN,
+    GENERIC,
+    MODULO,
+    STMT,
+    IDENT
+};
 
-enum noh_type {PROGRAM,
-	ASSIGN, SUM, MINUS, MULTI,
-	DIVIDE, PRINT, POW,
-	PAREN, STMT, INTEGER, FLOAT,
-	IDENT, GENERIC};
+static const char * node_type_name[] = {
+    "program", "=", "+", "-", "*",
+    "/", "print", "^", "()", "stmt",
+    "int", "float", "ident", "generic"
+};
 
-static const char *noh_type_names[] = {
-	"PROGRAM", "ASSIGN", "SUM", "MINUS", "MULTI",
-	"DIVIDE", "PRINT", "POW", "PAREN", "STMT", 
-	"INTEGER", "FLOAT", "IDENT", "GENERIC"};
-
-struct {
-	double dblv;
-	int intv;
-	char *ident;
+typedef struct {
+    int intv;
+    double dblv;
+    char *ident;
 } token_args;
 
-struct noh {
-	int id;
-	enum noh_type type;
-	int childcount;
+struct node {
+    int id;
+    enum node_type type;
+    int childcount;
+    double dblv;
+    int intv;
 
-	double dblv;
-	int intv;
-	char *name;
+    char *name;
 
-	struct noh *children[1];
+    struct node *children[1];
 };
-typedef struct noh noh;
 
-noh *create_noh(enum noh_type, int children);
+typedef struct node node;
 
-void print(noh *root);
+node *create_node(enum node_type, int children);
 
-void print_rec(FILE *f, noh *root);
+void print(node *root);
+
+void print_rec(FILE *f, node *root);
