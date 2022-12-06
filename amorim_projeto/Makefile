@@ -1,19 +1,19 @@
 CC=gcc
 
-all: proj
+all: calc
 
-proj.tab.c proj.tab.h:	proj.y
-	bison -d proj.y
+calc.tab.c calc.tab.h:	calc.y
+	bison -d calc.y
 
-lex.yy.c: proj.l proj.tab.h
-	flex proj.l
+lex.yy.c: calc.l calc.tab.h
+	flex calc.l
 
-proj: lex.yy.c proj.tab.c proj.tab.h
-	$(CC) -o proj proj.tab.c lex.yy.c header.c
+calc: lex.yy.c calc.tab.c calc.tab.h
+	$(CC) -o calc calc.tab.c lex.yy.c header.c 
 
 test: all
-	./proj programa.txt
+	./calc programa.txt
 
 clean:
-	$(RM) proj proj.tab.c lex.yy.c proj.tab.h output.out output.dot
+	$(RM) calc calc.tab.c lex.yy.c calc.tab.h output.out output.dot
 

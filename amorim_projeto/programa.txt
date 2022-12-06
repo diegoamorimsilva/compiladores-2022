@@ -1,14 +1,5 @@
-A = 10
-B = 20.7
-C = (A+B) / B
-
-if C < 900 and B > 30 
-    print A
-else
-    print E
+A = (10 < 2)
+B = 20.7^A
+C = (A+B)/B
+D = A + B
 print C
-
-while A != B
-    print A
-    
-    

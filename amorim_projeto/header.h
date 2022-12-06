@@ -1,6 +1,8 @@
 #pragma once
 
 #include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
 
 enum node_type {
     PROGRAM,
@@ -29,7 +31,9 @@ enum node_type {
     EQUAL,
     GREATER_E,
     LESSER_E,
-    NOT_EQUAL
+    NOT_EQUAL,
+    BRACES,
+    NO_VAR
 };
 
 static const char * node_type_name[] = {
@@ -37,7 +41,7 @@ static const char * node_type_name[] = {
     "print", "^", "()", "stmt", "int", "float",
     "ident", "generic", "string", "if", "else",
     "or", "and", "while", ">", "<", "==", ">=",
-    "<=", "!=",
+    "<=", "!=", "{}", "var",
 };
 
 typedef struct {
@@ -45,6 +49,19 @@ typedef struct {
     double dblv;
     char *ident;
 } token_args;
+
+typedef struct {
+	char *nome;
+	int token;
+	bool exists;
+} simbolo;
+
+static int error_count = 0;
+static int simbolo_qtd = 0;
+static simbolo tsimbolos[100];
+simbolo *simbolo_novo(char *nome, int token);
+bool simbolo_existe(char *nome);
+void debug();
 
 struct node {
     int id;
@@ -59,6 +76,15 @@ struct node {
 };
 
 typedef struct node node;
+
+typedef void (*visitor_action)(node **root,
+	node *node);
+
+void check_declared_vars(node **root,
+	node *node);
+
+void visitor_leaf_first(node **root,
+	visitor_action act);
 
 node *create_node(enum node_type, int children);
 
