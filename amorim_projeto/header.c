@@ -71,29 +71,37 @@ else if (no->type == IDENT) {
 			error_count++;
 		}
 	}
-
-	for (int i = 0; i < no->childcount; i++)
-		cast_to_float(root, no->children[i]); 
 }
 
-void check_is_number(node **root,
+void divide_by_zero(node **root,
 	node *no) {
-	if (no->type == IDENT) {
-		int s = search_symbol(no->name);
-		if (s != -1 && tsimbolos[s].token == INTEGER)
-			no->type = INTEGER;
-		else if (s != -1 && tsimbolos[s].token == FLOAT)
-			no->type = FLOAT;
+	if (no->type == DIVIDE) {
+		if (no->children[1]->type == INTEGER && no->children[1]->intv == 0) {
+			printf("erro: divisão por zero.\n");
+			error_count++;
+		}
+		else if (no->children[1]->type == FLOAT && no->children[1]->dblv == 0) {
+			printf("erro: divisão por zero.\n");
+			error_count++;
+		}
 	}
 }
 
-void cast_to_float(node **root,
+void check_is_integer(node **root,
+	node *no) {
+	if (no->type == FLOAT) {
+		if(no->dblv != (int)no->dblv) {
+			printf("erro: número float não pode ser convertido para inteiro.\n");
+		}
+		no->type = INTEGER;
+		no->intv = no->dblv;
+	}
+}
+
+void check_is_float(node **root,
 	node *no) {
 	if (no->type == INTEGER) {
-		printf("cast_to_float: %s - %i \n", node_type_name[no->type], no->intv);
-		if(no->intv <=0) {
-			printf("erro: número negativo não pode ser convertido para float.\n");
-		}
+		printf("check_is_float: %s - %i \n", node_type_name[no->type], no->intv);
 		no->type = FLOAT;
 		no->dblv = no->intv;
 	}

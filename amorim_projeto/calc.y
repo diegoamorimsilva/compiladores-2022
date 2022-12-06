@@ -35,9 +35,9 @@ program:
         // chamada da arvore abstrata
         // chamada da verificação semantica
         visitor_leaf_first(&prog, check_declared_vars);
-        visitor_leaf_first(&prog, check_is_number);
-        
-
+        visitor_leaf_first(&prog, check_is_float);
+        visitor_leaf_first(&prog, check_is_integer);
+        visitor_leaf_first(&prog, divide_by_zero);
         // chamada da geração de codigo
     }
     ;

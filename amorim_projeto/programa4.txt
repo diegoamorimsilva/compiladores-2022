@@ -20,7 +20,7 @@ while (50 < B)
     }
 }
 
-C = (A + B) / B
+C = (A + B) / 0
                   D = 0
                               print C
 
