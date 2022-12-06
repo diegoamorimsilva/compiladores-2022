@@ -35,6 +35,9 @@ program:
         // chamada da arvore abstrata
         // chamada da verificação semantica
         visitor_leaf_first(&prog, check_declared_vars);
+        visitor_leaf_first(&prog, check_is_number);
+        
+
         // chamada da geração de codigo
     }
     ;
@@ -68,7 +71,6 @@ stmt:
         $$->children[0] = $2;
     }
     ;
-
 
 if:
     IF logica '{' stmts '}' {
@@ -109,7 +111,7 @@ atribuicao:
         $$->children[0] = aux;
         $$->children[1] = $3;
         if (!simbolo_existe($1.ident))
-            simbolo_novo($1.ident, TOK_IDENT);
+            simbolo_novo($1.ident, TOK_IDENT);    
     }
     ;
 

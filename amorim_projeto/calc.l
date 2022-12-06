@@ -37,6 +37,7 @@ L	[a-zA-Z_]
 
 
 
+
 {D}+				{ yylval.args.intv = atoi(yytext); return TOK_INTEGER; }
 {D}+\.{D}+			{ yylval.args.dblv = atof(yytext); return TOK_FLOAT; }
 {L}({L}|{D})*		{ yylval.args.ident = strndup(yytext, yyleng); return TOK_IDENT; }

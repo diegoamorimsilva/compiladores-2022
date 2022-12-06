@@ -21,5 +21,6 @@ while (50 < B)
 }
 
 C = (A + B) / B
-                  D = 0.1
+                  D = 0
                               print C
+

@@ -52,14 +52,15 @@ int search_symbol(char *nome) {
 void check_declared_vars(node **root,
 	node *no) {
 	node *nr = *root;
-
+	
+	
 	if (no->type == ASSIGN) {
 		int s = search_symbol(
 			no->children[0]->name);
 		if (s != -1)
 			tsimbolos[s].exists = true;
 	}
-	else if (no->type == IDENT) {
+else if (no->type == IDENT) {
 		if (nr->type == ASSIGN && no == nr->children[0])
 			return;
 
@@ -69,7 +70,33 @@ void check_declared_vars(node **root,
 				0, no->name);
 			error_count++;
 		}
-	}    
+	}
+
+	for (int i = 0; i < no->childcount; i++)
+		cast_to_float(root, no->children[i]); 
+}
+
+void check_is_number(node **root,
+	node *no) {
+	if (no->type == IDENT) {
+		int s = search_symbol(no->name);
+		if (s != -1 && tsimbolos[s].token == INTEGER)
+			no->type = INTEGER;
+		else if (s != -1 && tsimbolos[s].token == FLOAT)
+			no->type = FLOAT;
+	}
+}
+
+void cast_to_float(node **root,
+	node *no) {
+	if (no->type == INTEGER) {
+		printf("cast_to_float: %s - %i \n", node_type_name[no->type], no->intv);
+		if(no->intv <=0) {
+			printf("erro: número negativo não pode ser convertido para float.\n");
+		}
+		no->type = FLOAT;
+		no->dblv = no->intv;
+	}
 }
 
 void visitor_leaf_first(node **root,

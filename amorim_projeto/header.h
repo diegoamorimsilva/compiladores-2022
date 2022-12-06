@@ -83,6 +83,12 @@ typedef void (*visitor_action)(node **root,
 void check_declared_vars(node **root,
 	node *node);
 
+void check_is_number(node **root,
+    node *node);
+
+void cast_to_float(node **root,
+    node *node);
+
 void visitor_leaf_first(node **root,
 	visitor_action act);
 

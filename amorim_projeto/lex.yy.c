@@ -897,27 +897,27 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 40 "calc.l"
+#line 41 "calc.l"
 { yylval.args.intv = atoi(yytext); return TOK_INTEGER; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 41 "calc.l"
+#line 42 "calc.l"
 { yylval.args.dblv = atof(yytext); return TOK_FLOAT; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 42 "calc.l"
+#line 43 "calc.l"
 { yylval.args.ident = strndup(yytext, yyleng); return TOK_IDENT; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 44 "calc.l"
+#line 45 "calc.l"
 { printf("Invalid caracter: %c.\n", yytext[0]); }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 46 "calc.l"
+#line 47 "calc.l"
 ECHO;
 	YY_BREAK
 #line 924 "lex.yy.c"
@@ -1937,7 +1937,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 46 "calc.l"
+#line 47 "calc.l"
 
 
 int yywrap() {
